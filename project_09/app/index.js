@@ -34,6 +34,13 @@ function setResHtml(sql, cb){
   });
 }
 
+const connection = mysql.createConnection(config)
+
+const sql_insert = `INSERT INTO people(name) values('Marina')`
+
+connection.query(sql_insert)
+connection.end()
+
 let sql ='SELECT name FROM people';
 
 const server = http.createServer((req, res)=>{
