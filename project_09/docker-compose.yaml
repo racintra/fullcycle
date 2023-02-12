@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: renatocintra/nodejs:1.0.0
+    command: node index.js
+    container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    networks:
+      app_net:
+        ipv4_address: 172.25.0.2
+    volumes:
+      - ./app:/usr/src/app
+    tty: true
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./database:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=appdb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      app_net:
+        ipv4_address: 172.25.0.3
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: renatocintra/nginx:1.0.0
+    container_name: nginx
+    networks:
+      app_net:
+        ipv4_address: 172.25.0.4
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+
+networks:
+    app_net:
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.25.0.0/24
