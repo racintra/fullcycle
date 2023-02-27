@@ -7,9 +7,9 @@ services:
       context: ./app
       dockerfile: Dockerfile
     image: renatocintra/nodejs:1.0.0
-    command: node index.js
+    command: bash -c "npm install && npm install mysql --save && node index.js"
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s docker-entrypoint.sh
     networks:
       app_net:
         ipv4_address: 172.25.0.2
