@@ -36,9 +36,13 @@ function setResHtml(sql, cb){
 
 const connection = mysql.createConnection(config)
 
-const sql_insert = `INSERT INTO people(name) values('Marina')`
+const sql_create = `CREATE TABLE IF NOT EXISTS people (id int not null auto_increment, name varchar(255), primary key (id))`;
 
+const sql_insert = `INSERT INTO people(name) values('Ana Luisa')`;
+
+connection.query(sql_create)
 connection.query(sql_insert)
+
 connection.end()
 
 let sql ='SELECT name FROM people';
