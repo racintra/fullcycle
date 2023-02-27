@@ -13,5 +13,3 @@ FROM node:18.13.0
      && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
  EXPOSE 3000
-
- ENTRYPOINT ["node", "index.js"]
